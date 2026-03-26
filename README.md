@@ -1,1 +1,1 @@
-# AI-Job-Board-with-smart-matching
+# AI-Job-Board
