@@ -91,6 +91,31 @@ class Database:
         session.close()
         return result
 
+    def get_all_users(self):
+        session = self.Session()
+        users = session.query(User).order_by(User.created_at.desc()).all()
+        result = [{
+            "id": u.id,
+            "email": u.email,
+            "name": u.name,
+            "role": u.role,
+            "created_at": str(u.created_at),
+            "profile_data": u.profile_data or {},
+        } for u in users]
+        session.close()
+        return result
+
+    def update_user_role(self, email, role):
+        session = self.Session()
+        user = session.query(User).filter_by(email=email).first()
+        if user:
+            user.role = role
+            session.commit()
+            session.close()
+            return True
+        session.close()
+        return False
+
     def update_user_profile(self, email, profile_data):
         session = self.Session()
         user = session.query(User).filter_by(email=email).first()
