@@ -14,8 +14,6 @@ def seed_demo_data(env):
         env.create_user("seeker@demo.com", hash_password("demo123"), "Alex Johnson", "seeker")
     if not env.get_user("recruiter@demo.com"):
         env.create_user("recruiter@demo.com", hash_password("demo123"), "Sarah Chen", "recruiter")
-    if not env.get_user("admin@demo.com"):
-        env.create_user("admin@demo.com", hash_password("demo123"), "System Admin", "admin")
 
     # ── Job Postings ─────────────────────────────────────────────
     jobs = [

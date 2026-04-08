@@ -155,7 +155,7 @@ def render_landing_page():
                         st.error(msg)
 
             st.markdown("""<div style="text-align:center; margin-top:20px; font-size:0.8rem; color:#6c757d;">
-                Demo accounts:<br><strong>seeker@demo.com</strong> / <strong>recruiter@demo.com</strong> / <strong>admin@demo.com</strong><br>password: <strong>demo123</strong>
+                Demo accounts:<br><strong>seeker@demo.com</strong> / <strong>recruiter@demo.com</strong><br>password: <strong>demo123</strong>
             </div>""", unsafe_allow_html=True)
 
         with tab_signup:
@@ -681,116 +681,6 @@ def render_recruiter_dashboard():
 
 
 # =====================================================================
-#  ADMIN DASHBOARD
-# =====================================================================
-def render_admin_dashboard():
-    user = get_current_user()
-    render_nav_bar(user["name"], "admin")
-
-    with st.sidebar:
-        st.markdown(f"""<div style="text-align:center; padding:20px 0;">
-            <div style="font-size:1.1rem; font-weight:700; color:#f8f9fa; margin-top:8px;">{user['name']}</div>
-            <div style="font-size:0.82rem; color:#6c757d;">{user['email']}</div>
-            <div style="margin-top:8px;"><span class="badge badge-active">ADMIN</span></div>
-        </div>""", unsafe_allow_html=True)
-        st.divider()
-        nav = st.radio("Navigation", ["Overview", "Users", "Jobs", "Applications", "RL Training"], label_visibility="collapsed")
-        st.divider()
-        if st.button("Logout", use_container_width=True):
-            logout()
-            st.rerun()
-
-    users = env.get_all_users()
-    jobs = env.get_all_jobs()
-    apps = env.get_all_applications()
-
-    if "Overview" in nav:
-        render_section_header("Admin Control Center", "System-wide visibility and governance")
-        c1, c2, c3, c4 = st.columns(4)
-        with c1:
-            render_metric_card("Users", len(users), "TOTAL")
-        with c2:
-            render_metric_card("Jobs", len(jobs), "POSTED")
-        with c3:
-            render_metric_card("Applications", len(apps), "TRACKED")
-        with c4:
-            stats = rl_trainer.get_stats()
-            render_metric_card("Episodes", stats["episodes_trained"], "RL")
-
-        role_counts = {}
-        for u in users:
-            role = u.get("role", "unknown")
-            role_counts[role] = role_counts.get(role, 0) + 1
-        st.markdown("<br>", unsafe_allow_html=True)
-        render_section_header("Role Distribution", "")
-        cols = st.columns(max(len(role_counts), 1))
-        for idx, (role, count) in enumerate(role_counts.items()):
-            with cols[idx]:
-                render_metric_card(role.title(), count, "USERS")
-
-    elif "Users" in nav:
-        render_section_header("User Management", "Review accounts and adjust roles")
-        if not users:
-            st.info("No users found.")
-            return
-
-        for u in users:
-            with st.expander(f"{u['name']}  |  {u['email']}  |  role: {u['role']}"):
-                c1, c2 = st.columns([2, 1])
-                with c1:
-                    st.write(f"**Created:** {u.get('created_at', 'N/A')[:19]}")
-                with c2:
-                    if u["email"] != user["email"]:
-                        new_role = st.selectbox(
-                            "Role",
-                            ["seeker", "recruiter", "admin"],
-                            index=["seeker", "recruiter", "admin"].index(u["role"]) if u["role"] in ["seeker", "recruiter", "admin"] else 0,
-                            key=f"role_{u['email']}",
-                        )
-                        if st.button("Update Role", key=f"upd_role_{u['email']}"):
-                            ok = env.update_user_role(u["email"], new_role)
-                            if ok:
-                                st.success(f"Updated {u['email']} to {new_role}.")
-                                st.rerun()
-                            else:
-                                st.error("Failed to update role.")
-                    else:
-                        st.caption("You cannot change your own role while logged in.")
-
-    elif "Jobs" in nav:
-        render_section_header("Job Inventory", "All posted jobs across recruiters")
-        if not jobs:
-            st.info("No jobs posted yet.")
-            return
-        for job in jobs:
-            c1, c2, c3, c4 = st.columns([3, 2, 1, 1])
-            with c1:
-                st.markdown(f"**{job['title']}** -- *{job['company']}*")
-            with c2:
-                st.write(job.get("posted_by", "N/A"))
-            with c3:
-                st.write(job.get("status", "Active"))
-            with c4:
-                total_apps = len([a for a in apps if a["job_id"] == job["id"]])
-                st.write(f"{total_apps} apps")
-            st.divider()
-
-    elif "Applications" in nav:
-        render_section_header("Application Audit", "Cross-job application activity")
-        if not apps:
-            st.info("No applications yet.")
-            return
-        for app in apps[:200]:
-            job = env.get_job(app["job_id"])
-            title = job["title"] if job else app["job_id"]
-            st.markdown(f"**{title}** | {app['profile_id']} | {app['status']} | {app['applied_date'][:10]}")
-            st.divider()
-
-    elif "RL Training" in nav:
-        render_rl_dashboard()
-
-
-# =====================================================================
 #  RL TRAINING DASHBOARD (shared between seeker and recruiter)
 # =====================================================================
 def render_rl_dashboard():
@@ -893,8 +783,6 @@ if require_auth():
         render_seeker_dashboard()
     elif role == "recruiter":
         render_recruiter_dashboard()
-    elif role == "admin":
-        render_admin_dashboard()
     else:
         st.error("Unknown role.")
 else:

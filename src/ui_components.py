@@ -25,9 +25,6 @@ def inject_custom_css():
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden !important;}
-    [data-testid="collapsedControl"] {
-        display: none !important;
-    }
     .glass-card {
         background: #343a40;
         border: 1px solid #495057;
@@ -223,19 +220,11 @@ def inject_custom_css():
 
     /* ── Sidebar ── */
     section[data-testid="stSidebar"] {
-        background: #1e293b;
-        border-right: 1px solid #334155;
-        min-width: 18rem !important;
-        max-width: 18rem !important;
-        transform: translateX(0) !important;
-    }
-    section[data-testid="stSidebar"][aria-expanded="false"] {
-        min-width: 18rem !important;
-        max-width: 18rem !important;
-        transform: translateX(0) !important;
+        background: #212529;
+        border-right: 1px solid #343a40;
     }
     section[data-testid="stSidebar"] .stMarkdown {
-        color: #e2e8f0;
+        color: #dee2e6;
     }
 
     /* ── Buttons (global) ── */
@@ -397,10 +386,10 @@ def inject_custom_css():
 
     /* ── Radio buttons in sidebar ── */
     section[data-testid="stSidebar"] .stRadio label {
-        color: #e2e8f0 !important;
+        color: #dee2e6 !important;
     }
     section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
-        color: #cbd5e1 !important;
+        color: #adb5bd !important;
         font-weight: 500 !important;
     }
 
@@ -449,8 +438,7 @@ def render_status_badge(status):
 
 def render_nav_bar(user_name, role):
     """Render the top navigation bar."""
-    role_map = {"seeker": "Job Seeker", "recruiter": "Recruiter", "admin": "Admin"}
-    role_label = role_map.get(role, role.title())
+    role_label = "Job Seeker" if role == "seeker" else "Recruiter"
     st.markdown(f"""
     <div class="nav-bar">
         <div class="nav-brand">AI Job Dashboard</div>

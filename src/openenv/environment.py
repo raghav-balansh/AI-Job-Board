@@ -25,12 +25,6 @@ class Environment:
     def get_user(self, email):
         return self.db.get_user(email)
 
-    def get_all_users(self):
-        return self.db.get_all_users()
-
-    def update_user_role(self, email, role):
-        return self.db.update_user_role(email, role)
-
     def update_user_profile(self, email, profile_data):
         self.db.update_user_profile(email, profile_data)
 

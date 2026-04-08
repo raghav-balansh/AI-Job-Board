@@ -1,13 +1,3 @@
----
-title: AI Job Dashboard — RL + Qwen 2.5 + OpenEnv
-emoji: 🤝
-colorFrom: balck -grey platte
-colorTo: black
-sdk: streamlit
-sdk_version: 1.45.1
-app_file: app.py
-pinned: false
-license: apache 2.0
 
 #  AI Job Dashboard — Reinforcement Learning + Qwen 2.5 + OpenEnv
 
@@ -17,19 +7,19 @@ A **reinforcement learning-powered** job dashboard built with **PyTorch** policy
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    Streamlit Dashboard                   │
+│                    Streamlit Dashboard                  │
 │  (Job Seeker View  |  Recruiter View  |  RL Dashboard)  │
 ├─────────────────────────────────────────────────────────┤
-│                  RL Policy Networks (PyTorch)            │
+│                  RL Policy Networks (PyTorch)           │
 │  JobMatcherNN (Actor-Critic)  |  CandidateScorerNN (DQN)│
 ├─────────────────────────────────────────────────────────┤
 │               Qwen 2.5 (HF Inference API)               │
-│  Resume Tailoring  |  Cover Letters  |  Analysis         │
+│  Resume Tailoring  |  Cover Letters  |  Analysis        │
 ├─────────────────────────────────────────────────────────┤
-│                OpenEnv (RL Environment)                  │
-│  State Manager  |  Reward Calculator  |  Replay Buffer   │
+│                OpenEnv (RL Environment)                 │
+│  State Manager  |  Reward Calculator  |  Replay Buffer  │
 ├─────────────────────────────────────────────────────────┤
-│                   SQLite + SQLAlchemy                    │
+│                   SQLite + SQLAlchemy                   │
 └─────────────────────────────────────────────────────────┘
 ```
 
