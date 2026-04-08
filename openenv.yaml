@@ -1,0 +1,23 @@
+version: "1.0"
+name: "ai-job-dashboard"
+
+api:
+  base_url: "https://raghavmaheshwari-ai-powerd-job-dashboard.hf.space"
+  timeout_seconds: 30
+
+endpoints:
+  reset:
+    path: "/ok"
+    method: "POST"
+    expected_status: 200
+  inference:
+    path: "/inference"
+    method: "POST"
+    expected_status: 200
+
+inference:
+  request_content_type: "application/json"
+  request_schema:
+    prompt: "string"
+  response_schema:
+    output: "string"
