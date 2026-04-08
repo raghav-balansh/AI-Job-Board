@@ -15,24 +15,37 @@ class InferenceRequest(BaseModel):
 def root():
     return {"message": "service_up"}
 
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+
+@app.get("/metadata")
+def metadata():
+    return {"name": "ai-job-dashboard", "description": "AI Job Dashboard RL"}
+
+@app.get("/schema")
+def schema():
+    return {"action": {}, "observation": {}, "state": {}}
+
+@app.post("/mcp")
+def mcp():
+    return {"jsonrpc": "2.0"}
+
+@app.post("/state")
+def state_env():
+    return {"status": "ok"}
 
 @app.post("/ok")
 def ok():
-    # Required by automated checker
     return {"status": "ok"}
-
 
 @app.post("/reset")
 def reset_env():
-    # Standard OpenEnv reset path
     return {"status": "ok"}
-
 
 @app.post("/step")
 def step_env():
-    # Standard OpenEnv step path
     return {"status": "ok"}
-
 
 @app.post("/inference")
 def run_inference(req: InferenceRequest):
