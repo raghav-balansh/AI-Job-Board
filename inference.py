@@ -10,11 +10,12 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 # Optional: only needed when using from_docker_image()
 LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 
-# All LLM calls use this OpenAI client configured by env vars.
-client = OpenAI(
-    base_url=API_BASE_URL,
-    api_key=HF_TOKEN,
-)
+def _get_client() -> OpenAI:
+    # All LLM calls use this OpenAI client configured by env vars.
+    return OpenAI(
+        base_url=API_BASE_URL,
+        api_key=HF_TOKEN,
+    )
 
 
 def from_docker_image() -> OpenAI:
@@ -31,6 +32,7 @@ def inference(prompt: str) -> str:
 
     print("START")
     print("STEP: preparing request")
+    client = _get_client()
     response = client.chat.completions.create(
         model=MODEL_NAME,
         messages=[{"role": "user", "content": prompt}],
