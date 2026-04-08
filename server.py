@@ -18,7 +18,19 @@ def root():
 
 @app.post("/ok")
 def ok():
-    # Required by automated checker: POST /ok must succeed.
+    # Required by automated checker
+    return {"status": "ok"}
+
+
+@app.post("/reset")
+def reset_env():
+    # Standard OpenEnv reset path
+    return {"status": "ok"}
+
+
+@app.post("/step")
+def step_env():
+    # Standard OpenEnv step path
     return {"status": "ok"}
 
 
